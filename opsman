@@ -64,13 +64,22 @@ upload_to_opsman() {
     UAA_ACCESS_TOKEN=$(uaac context | grep access_token | awk '{ print $2 }')
   fi
 
-  echo "Uploading $LOCAL_FILE_NAME"
-
-  curl "https://localhost/api/v0/available_products" \
-    -k -# -o /dev/null \
-    -X POST \
-    -H "Authorization: Bearer $UAA_ACCESS_TOKEN" \
-    -F "product[file]=@$LOCAL_FILE_NAME"
+  if [[ $LOCAL_FILE_NAME == *"bosh-stemcell"* ]]; then
+    #stemcell upload
+    echo "uploading stemcell $LOCAL_FILE_NAME"
+    curl "https://localhost/api/stemcells"
+       -k -# -o /dev/null \
+       -X POST \
+       -H "Authorization: Bearer $UAA_ACCESS_TOKEN" \
+       -F "product[file]=@$LOCAL_FILE_NAME"
+  else
+    echo "upload services $LOCAL_FILE_NAME"
+    curl "https://localhost/api/v0/available_products" \
+       -k -# -o /dev/null \
+       -X POST \
+       -H "Authorization: Bearer $UAA_ACCESS_TOKEN" \
+       -F "product[file]=@$LOCAL_FILE_NAME"
+  fi
 }
 
 upload_all_to_opsman() {
