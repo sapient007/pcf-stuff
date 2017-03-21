@@ -11,10 +11,12 @@ set -e
 
 usage_and_exit() {
   cat <<EOF
-Usage: pivnet <command> [options]
+Usage: pivnet <command> [options] [options]
+
 Examples:
   pivnet token SAMPLEaJimQVTq2zWBYZ
   pivnet download https://network.pivotal.io/.../product_files/7509/download
+  (optional, manually define filename) pivnet download https://network.pivotal.io/.../product_files/7509/download optional_save_filename
 EOF
   exit 1
 }
@@ -101,7 +103,11 @@ download_from_pivnet() {
   fi
 
   # Get the filename from the redirect and strip the newline char
-  local FILENAME=$(echo "$OUTPUT" | grep -o -E 'filename=.*$' | sed -e 's/filename=//' | sed "s/$(printf '\r')//")
+  if [$ARG2 == 1]; then
+    local FILENAME=$(echo "$OUTPUT" | grep -o -E 'filename=.*$' | sed -e 's/filename=//' | sed "s/$(printf '\r')//")
+  else
+    local FILENAME=$ARG2
+  fi
 
   if [ -z "$FILENAME" ]; then
     error_and_exit "Unable to get the filename from the download url."
@@ -131,12 +137,15 @@ download_from_pivnet() {
   fi
 }
 
-CMD=$1 ARG=$2
+CMD=$1 ARG=$2 ARG2=${3:-1}
 
 if [ "token" = "$CMD" ]; then
   set_token $ARG
 elif [ "download" = "$CMD" ]; then
+  echo $ARG
+  echo $ARG2
   download_from_pivnet $ARG
+  echo $ARG
 else
   usage_and_exit
 fi
