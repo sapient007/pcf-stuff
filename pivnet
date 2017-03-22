@@ -103,7 +103,7 @@ download_from_pivnet() {
   fi
 
   # Get the filename from the redirect and strip the newline char
-  if [$ARG2 == 1]; then
+  if [ $ARG2 == 1 ]; then
     local FILENAME=$(echo "$OUTPUT" | grep -o -E 'filename=.*$' | sed -e 's/filename=//' | sed "s/$(printf '\r')//")
   else
     local FILENAME=$ARG2
