@@ -67,7 +67,7 @@ upload_to_opsman() {
   if [[ $LOCAL_FILE_NAME == *"bosh-stemcell"* ]]; then
     #stemcell upload
     echo "uploading stemcell $LOCAL_FILE_NAME"
-    curl "https://localhost/api/stemcells" \
+    curl "https://localhost/api/v0/stemcells" \
        -k -# -o /dev/null \
        -X POST \
        -H "Authorization: Bearer $UAA_ACCESS_TOKEN" \
