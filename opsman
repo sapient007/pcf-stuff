@@ -71,7 +71,7 @@ upload_to_opsman() {
        -k -# -o /dev/null \
        -X POST \
        -H "Authorization: Bearer $UAA_ACCESS_TOKEN" \
-       -F "product[file]=@$LOCAL_FILE_NAME"
+       -F "stemcell[file]=@$LOCAL_FILE_NAME"
   else
     echo "upload services $LOCAL_FILE_NAME"
     curl "https://localhost/api/v0/available_products" \
