@@ -104,7 +104,8 @@ download_from_pivnet() {
 
   # Get the filename from the redirect and strip the newline char
   if [ $ARG2 == 1 ]; then
-    local FILENAME=$(echo "$OUTPUT" | grep -o -E 'filename=.*$' | sed -e 's/filename=//' | sed "s/$(printf '\r')//")
+    #local FILENAME=$(echo "$OUTPUT" | grep -o -E 'filename=.*$' | sed -e 's/filename=//' | sed "s/$(printf '\r')//")
+    local FILENAME=$(echo "$OUTPUT" | grep -oP "(?<=product-files/)[^ ]+" | cut -d / -f 1 )
   else
     local FILENAME=$ARG2
   fi
